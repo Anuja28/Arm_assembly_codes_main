@@ -12,6 +12,6 @@ __main
 	   moveq r5,#1
 	   movne r5,#2
 	   
-stop	B stop ; stop program
+stop	B stop ; stop program....
      
 	   END
