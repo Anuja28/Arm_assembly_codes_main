@@ -1,0 +1,22 @@
+       AREA     appcode, CODE, READONLY
+	   ENTRY
+       EXPORT __main
+	  
+__main    
+       mov r1,#30
+	   mov r2,#2
+	   mov r3,#9
+	   cmp r1,r2
+	   ite gt
+	   movgt r4,r1
+	   movle r4,r2
+	   
+	  cmp r4,r3
+	  ite gt
+	  movgt r5,r4
+	  movle r5,r3 
+	   
+	   
+stop	B stop ; stop program
+     
+	   END
