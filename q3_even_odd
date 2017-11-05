@@ -1,0 +1,17 @@
+    AREA     appcode, CODE, READONLY
+	   ENTRY
+       EXPORT __main
+	  
+__main    
+       mov r1,#30
+	   mov r2,#2
+	   udiv r0,r1,r2
+	   mls r3,r0,r2,r1
+	   cmp r3,#0
+	   ite eq
+	   moveq r5,#1
+	   movne r5,#2
+	   
+stop	B stop ; stop program
+     
+	   END
