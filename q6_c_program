@@ -1,0 +1,18 @@
+       AREA     appcode, CODE, READONLY
+	   ENTRY
+       EXPORT __main
+	  
+__main    
+       MOV R2, #10
+	     MOV R7,#12
+loop 
+	     CMP R2,R7
+	     ITE GT
+       SUBGT R2,R2,R7
+       SUBLE R7,R7,R2
+       BNE  loop
+	   
+	   
+stop	B stop ; stop program
+     
+	   END
