@@ -1,47 +1,41 @@
- 
-;Description: This code generates the output of exponential series for x=3 and n=3. 
-;             The output is 1+3+4.5 = 8 (given by S9=0X41080000)
-; For the ease of coding, the initial 1 is kept separate and added to the accumulated result at the end 
-; and a separate decrementing counter has been implemented by R5 which is initialsed as n-1, so that n can be varied from 1 to n.
-; Register S9 stores the final result
+; Output avaialble in S3 register
+X         EQU 0x3F800000 ;ieee 754 for 1.0
+TEMP     EQU    0x3F800000 ;ieee 754 for 1.0
+;PREC    EQU 0x3A83126F ;precision till decimal  WIP
+    
+    PRESERVE8
+    THUMB
+    AREA expx,CODE,READONLY
+    EXPORT __main
+    ENTRY
+    
+__main FUNCTION
+    
+    MOV R0, #X
+    MOV R1, #TEMP
+;    MOV R2, #PREC
+    MOV R3, #0 ;start from 1 keep loop count
+    
+    VMOV.F32 S0, R0
+    VMOV.F32 S1, R1
+    VMOV.F32 S3, R1
+    VMOV.F32 S4, R1
+    VMOV.F32 S5, R3
+    VMOV.F32 S6, R1 ; increase the counter
+    
+loop
+    ADD R3, R3, #1
+    VADD.F32 S5, S5, S6 ; contains i start i from 1
+    VMUL.F32 S1, S1, S0 ; find x^ (1*x) -- (1*x*x) and so on
+    VMUL.F32 S4, S4, S5 ; fact(i)
+    VDIV.F32 S2, S1, S4 ; do x^/fact(i)
+    VADD.F32 S3, S3, S2 ; cummulative sum
+    
+    CMP R3, #10
+    BNE loop
+    
+stop
+    B stop
+    ENDFUNC
+    END
 
-     PRESERVE8
-     THUMB
-     AREA     appcode, CODE, READONLY
-     EXPORT __main
-ENTRY 
-__main  FUNCTION
- 
-
-        VLDR.F32 S0, =1 ; load initial value of the series '1'
- 
-VLDR.F32 S1, =3 ; load x - by user
-VLDR.F32 S2, =1 ; stores final value of denominator
-VLDR.F32 S3, =1 ; multiplying factor for denominator in order to generate factorial
-MOV R4, #3      ; user defined count
-SUB R5, R4, #1  ; Temporary decremented counter
-VLDR.F32 S6, =1 ; initialise multiplying factor for numerator
-VLDR.F32 S7, =0 ; DIVision RESULT
-VLDR.F32 S8, =0 ; INITIALISE series summation 
- 
-loop CMPNE R5, #1         ; Actually need to stop when R5 becomes zero, but was taking extra round in the loop 
-;so made it to #1 for correct result generation
-
-        ;do following if decremented counter-R5 is greater than zero => more than 1 elements of series required in output
-VMUL.F32 S6, S6, S1 ;numerator multiply initial (1)x(X) 
- 
-VMUL.F32  S2, S2, S3 ;denominator initialy 1x1 otherwise 1x2 and so on and store result in r2
-VADD.F32  S3, S3, S0 ; incrementing S3 - so as to generate factorial in ascending order i.e. 1x2x3.... as per decremented counter- R5
- 
-VDIV.F32 S7, S6, S2  ; divide numerator by denominator
-VADD.F32 S8, S8, S7 ; successive addition of generated division results of every element in the series
-SUB R5, R5, #1      ; decrement counter R5 
-BNE loop
- 
- 
-    VADD.F32 S9, S8, S0 ; to generate {1+ (summation x^[R5]/[R5]!) }
- 
- 
-stop B stop ; stop program
-     ENDFUNC
-     END
