@@ -4,17 +4,17 @@
 	  
 __main    
        mov r1,#30
-	   mov r2,#2
+	   mov r2,#2 
 	   mov r3,#9
-	   cmp r1,r2
+	   cmp r1,r2 //comparing 1st 2 registers
 	   ite gt
-	   movgt r4,r1
+	   movgt r4,r1 // if r1 is greater,move it to r4 else move r2 to r4
 	   movle r4,r2
 	   
-	  cmp r4,r3
+	  cmp r4,r3 //comparing 3rdregister with r4
 	  ite gt
 	  movgt r5,r4
-	  movle r5,r3 
+	  movle r5,r3 // writing down the greatest value in r5
 	   
 	   
 stop	B stop ; stop program
