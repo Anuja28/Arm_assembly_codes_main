@@ -5,10 +5,10 @@
 __main    
        mov r1,#30
 	   mov r2,#2
-	   udiv r0,r1,r2
+	   udiv r0,r1,r2 
 	   mls r3,r0,r2,r1
 	   cmp r3,#0
-	   ite eq
+	   ite eq // if the number is even, move 1 to r5 else move 2 to r5
 	   moveq r5,#1
 	   movne r5,#2
 	   
