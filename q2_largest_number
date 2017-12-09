@@ -1,22 +1,20 @@
-       AREA     appcode, CODE, READONLY
-	   ENTRY
-       EXPORT __main
-	  
-__main    
-       mov r1,#30
-	   mov r2,#2 
-	   mov r3,#9
-	   cmp r1,r2 //comparing 1st 2 registers
-	   ite gt
-	   movgt r4,r1 // if r1 is greater,move it to r4 else move r2 to r4
-	   movle r4,r2
-	   
-	  cmp r4,r3 //comparing 3rdregister with r4
-	  ite gt
-	  movgt r5,r4
-	  movle r5,r3 // writing down the greatest value in r5
-	   
-	   
-stop	B stop ; stop program
-     
-	   END
+ PRESERVE8
+     THUMB
+ AREA     appcode, CODE, READONLY
+     EXPORT __main
+	 ENTRY 
+__main  FUNCTION
+	MOV r2,#6
+	MOV r4,#4
+	MOV r5,#8
+	MOV r6,#0
+	MOV r1,#0x20000000
+	CMP r2,r4
+	STRLT r4,[r1]
+	STRGT r2,[r1]
+	LDR r6,[r1]
+	CMP r6,r5
+	MOV r6,r5
+stop B stop ; stop program
+     ENDFUNC
+     END
