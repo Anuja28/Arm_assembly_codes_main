@@ -1,23 +1,24 @@
-     AREA     appcode, CODE, READONLY
-	   ENTRY
-       EXPORT __main
-	  
-__main    
-	   mov r0,#0  // initial values in registers r0 and r1
-	   mov r1,#1
-	   mov r2,#5 // hardcoded the value 5 to get 5!
-	  
-loop   add r3,r0,r1
-	   mov r0,r1
-	   mov r1,r3
-	   subgt r2,r2,#1
-	   cmp r2,#0
-	   bne loop
-	   
-
-
-	   
-	   
-stop	B stop ; stop program
-     
-	   END
+	PRESERVE8
+    THUMB
+	AREA     appcode, CODE, READONLY
+    EXPORT __main
+	ENTRY 
+__main  FUNCTION
+	; FIBONACCI SERIES
+	MOV R0,#0
+    MOV R1,#1
+    MOV R3,#10 
+    MOV R4,#0 
+    MOV R5,#0x20000000
+    ADD R4,R0,R1
+loop1 CMP R4,R3 
+    BLE LOOP
+    B stop 
+LOOP STR R4,[R5];
+    MOV R0,R1
+    MOV R1,R4
+    ADD R4,R0,R1
+	B loop1
+stop    B stop 
+        ENDFUNC 
+        END
